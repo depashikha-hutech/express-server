@@ -24,7 +24,6 @@ app.get("/", (req, res) => {
   res.send("Welcome to localhost express server");
 });
 
-
 app.listen(port, (err) => {
   if (!err) {
     console.log("server running at port 3001");
