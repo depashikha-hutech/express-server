@@ -22,4 +22,31 @@ async function addUser(users) {
          res.status(500).json({sucess:false,message:"internal server error"});
      }
      }
-module.exports = { getUser,  addUser };
+
+     //
+     async function updateUser(id, user){
+       try {
+        console.log(user);
+        const userUpdated = await db.Users.update(user, {where:{id} });
+       //  console.log(updateUser);
+         return user;
+        return "12";
+       }catch (error) {
+        console.log (error);
+        res.status(500).json({sucess:false,message:"internal server error", error: error.message });
+
+       }
+
+        }
+        // delete 
+        async function deleteUser(id){
+        try{
+            const delUser =await db.Users.destroy({ where: { id}});
+            return delUser;
+        } catch (error) {
+            return ({ sucess: false, statusCode:500, message: "internal server error", error: error.message});
+        }
+        }
+
+     
+module.exports = {addUser, getUser, updateUser, deleteUser };
