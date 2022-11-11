@@ -52,7 +52,7 @@ route.delete("/delete/:id", async (req, res) =>{
     try{
         console.log(req?.params?.id);
         let userdelete = await deletedUser(req?.params?.id)
-        res.status(200).json({ userdelete});
+        res.status(200).json({ userdelete });
         return userdelete;
     } catch (error){
     res.status(500).json({ sucess: false, message: "internal server error"});
