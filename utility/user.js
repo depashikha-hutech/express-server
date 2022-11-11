@@ -41,7 +41,7 @@ async function addUser(users) {
         // delete 
         async function deleteUser(id){
         try{
-            const delUser =await db.Users.destroy({ where: { id}});
+            const delUser = await db.Users.destroy({ where: { id} });
             return delUser;
         } catch (error) {
             return ({ sucess: false, statusCode:500, message: "internal server error", error: error.message});
