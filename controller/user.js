@@ -1,14 +1,14 @@
 let express = require("express");
 let route = express.Router();
 let db = require("../model/db");
-const {  addUser, getUser, updateUser, deleteUser} = require("../utility/user");
+const {  addUser, getUser, updateUser, deletedUser} = require("../utility/user");
 
 //post 
 
 route.post("/adduser", async(req,res) =>{
     try{
         const crtUser = await addUser (req.body);
-        res.status(200).json(crtUser);
+      res.status(crtUser?.statusCode).json(crtUser)
 } catch (error){
     console.log(error);
         res.status(500).json({ sucess: false, message: "internal server error" });
@@ -19,7 +19,7 @@ route.post("/adduser", async(req,res) =>{
  route.get("/", async (req, res) =>{
      try{
   const userInfo = await getUser();
-  res.status(200).json(userInfo);
+  res.status(userInfo?.statusCode).json(userInfo)
 
  } catch (error) {
      res.status(500).json({ sucess: false, message: "internal server error"});
@@ -28,12 +28,8 @@ route.post("/adduser", async(req,res) =>{
 //get user by id:
  route.get("/:id", async (req, res)=> {
      try {
-         let user = await  getUser(req?.params?.id);
-         res.status(200).json({
-             sucess: true,
-             message: "user found",
-             users: user[0]
-         });
+         let userdetail = await  getUser(req?.params?.id);
+         res.status(userdetail?.statusCode).json(userdetail)
      }catch (error) {
          res.status(500).json({ sucess: false, message: "internal server error"});
      }
@@ -42,22 +38,18 @@ route.post("/adduser", async(req,res) =>{
  route.put("/updateuser/:id", async (req, res) => {
  try{
     let userdisplay = await updateUser(req?.params?.id, req?.body)
-    res.status(200).json({ userdisplay });
+    res.status(userdisplay?.statusCode).json(userdisplay)
  }catch (error) {
     res.status(500).json({ sucess: false, message: "internal server error"});
  }
 });
 // delete by id
 route.delete("/delete/:id", async (req, res) =>{
-    try{
-        console.log(req?.params?.id);
-        let userdelete = await deletedUser(req?.params?.id)
-        res.status(200).json({ userdelete});
-        return userdelete;
+    try{    
+   let userdelete = await deletedUser(req?.params?.id)
+        res.status(userdelete?.statusCode).json(userdelete)
     } catch (error){
     res.status(500).json({ sucess: false, message: "internal server error"});
-
     }
-    
 });
     module.exports = route;
