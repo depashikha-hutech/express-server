@@ -6,7 +6,6 @@ async function addUser(users) {
     try{
         const usersInfo = await db.Users.create(users)
       return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:{usersInfo}});
-
     } catch (error){
         console.log(error);
           return({ sucess:false, statusCode: 500, message:"internal server error", error:error.message});
@@ -17,15 +16,12 @@ async function addUser(users) {
      try {
          const usersdetails = await db.Users.findAll({where: id ? { id } : {} });
          if (!usersdetails.length){
-      return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:{usersInfo}});
+      return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:{usersdetails}});
          }
-    
     } catch (error) {
-        return({ sucess:false, statusCode: 400, message:"user not found", error:error.message});
+        return({ sucess:false, statusCode: 400, message:"user not found", error: error.message });
      }
      }
-
-     //
      async function updateUser(id, user){
        try {
         console.log(user);
@@ -34,9 +30,9 @@ async function addUser(users) {
         return "12";
        }catch (error) {
         console.log (error);
-        return({ sucess:false, statusCode: 400, message:"user not found", error:error.message});
+        return({ sucess:false, statusCode: 400, message:"user not found", error: error.message });
        }
-        }
+        } 
         // delete 
         async function deletedUser(id){
         try{
