@@ -3,9 +3,8 @@ let route = express.Router();
 let db = require("../model/db");
 const {  addUser, getUser, updateUser, deletedUser, createUserUtility,loginUtility} = require("../utility/user");
 const { authorizeUser } = require("../utility/auth");
-const router =Router();
 //signup
-router.post("/signup", async (req,res) =>{
+route.post("/signup", async (req,res) =>{
     try{
         console.log("user signup..");
         let response = await createUserUtility (req.body);
@@ -16,28 +15,26 @@ router.post("/signup", async (req,res) =>{
 
 });
 // loginin
-router.post("/login", async (req, res) =>{
+route.post("/login", async (req, res) =>{
     try{
         console.log("user login");
-        const userExist = await loginUtility(req.email,  req.password); 
-      //  if (userExist?.id){
-        res.status(userExist?.statusCode).json(userExist)
-   // } else{
-   //     res.status(userExist?.statusCode).json(usernotExist)
+        const userExist = await loginUtility(req.body.email,  req.body.password); 
+        console.log({userExist });
+        res.status(userExist?.statusCode).json(userExist);
     } catch (error){
         res.status(500).json({ sucess: false, message: "internal server error", error:error.message });
     }
-  
 });
 
 //post 
 
-route.post("/adduser", async(req,res) =>{
+route.post("/adduser", authorizeUser, async(req,res) =>{
     try{
-        const crtUser = await addUser (req.body);
+        console.log ("adduser..");
+        const crtUser = await addUser(req.body);
       res.status(crtUser?.statusCode).json(crtUser)
 } catch (error){
-        res.status(500).json({ sucess: false, message: "internal server error", error:error.message });
+        res.status(500).json({ sucess: false, message: "failed to  register user", error:error.message });
     }
 });
 //get all users

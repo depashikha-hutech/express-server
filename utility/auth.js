@@ -1,24 +1,35 @@
-async function createJWTToken(info) {
+const db = require("../model/db");
+const users = require("../model/users");
+const jwt = require("jsonwebtoken")
+
+
+async function createJWTToken(id, email) {
     //get the matched user details
     //create JWT token which includes onfo
-    // return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
-  
-    return { idToken: "", refreshToken: "na" };
+     
+    const token = jwt.sign({user:{ id, email}} , process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+    console.log(token);
+    return { idToken: token, refreshToken: "na" };
   }
   
   async function authorizeUser(req, res, next) {
     console.log("Authorizing user permission.....");
-    next();
-    // const authHeader = req.headers["authorization"];
-    // const token = authHeader && authHeader.split(" ")[1];
-    // if (token == null) res.send(401);
-    // jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    //   if (err) return res.send(403);
-    //   console.log(user);
-    //   req.user = user;
-    //   next();
-    // });
-  }
-  
+    //next();
+     const authHeader = req.headers["authorization"];
+     //console.log(authHeader);
+     const tokeninfo = authHeader ? authHeader.split(" ")[1]: null
+     console.log({tokeninfo});
+    if (tokeninfo == null) res.send(401);
+     jwt.verify(tokeninfo, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+       if (err) { 
+        res.send(401);
+       } else {
+       console.log(user);
+       req.user = user;
+       next();
+       }
+     });
+
+    }
   module.exports = { createJWTToken, authorizeUser };
   

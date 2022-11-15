@@ -2,10 +2,9 @@ const { Users} = require("../model/db");
 const db = require("../model/db");
 const User = db.Users;
 const users = require("../model/users");
-
-
+const {createJWTToken} =require('./auth')
 async function createUserUtility(userDetails){
-    try{
+    try{ 
         const users = await db.Users.create(userDetails);
         if (users) {
             return({ sucess: true, statusCode:200, message: " user registered "});
@@ -16,20 +15,25 @@ async function createUserUtility(userDetails){
         return({ sucess:false, statusCode: 400, message:"user not found", error: error.message });
         }
     }
- async function loginUtility(email, password);
+ async function loginUtility(email, password) {
   try{
        const userExist = await db.Users.findOne({ where:{ email, password }})
-       console.log(userExist);
-       if (userExist) {
-        return({ sucess: true, statusCode:200, message: "user sucessfully login" });
+       const userDetails = userExist.get()
+     //  console.log(userExist.get());
+       if (userDetails?.id) {
+        //idf id exist
+        //generate token with id and email
+        //return token with status code
+        const token =  await createJWTToken( userExist?.id, userExist?.email )
+        return({ sucess: true,...token, statusCode:200, message: "user sucessfully login" });
        }else {
-        return({ sucess: false, statusCode:500, message: "loginfail" });
+        return({ sucess: false, statusCode:401, message: "unauthorize" });
        }
     } catch (error) {
         return({ sucess:false, statusCode: 500, message:"internal server error", error:error.message});
 
     }
-    
+}
 
 // async function getUserUtility(id = null){
 //     try{
@@ -48,7 +52,7 @@ async function createUserUtility(userDetails){
 async function addUser(users) {
     try{
         const usersInfo = await db.Users.create(users)
-      return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:{usersInfo}});
+      return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:usersInfo.get()});
     } catch (error){
         console.log(error);
           return({ sucess:false, statusCode: 500, message:"internal server error", error:error.message});
