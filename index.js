@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 let db = require("./model/db");
+const cors = require("cors");
 const userroutes = require("./controller/user");
 require("dotenv").config();
 const port = process?.env?.port || 3001;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 db.sequelize
   .authenticate()
