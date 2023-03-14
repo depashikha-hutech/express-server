@@ -15,9 +15,10 @@ async function addUser(users) {
  async function getUser(id = null) {
      try {
          const usersdetails = await db.Users.findAll({where: id ? { id } : {} });
-         if (!usersdetails.length){
+         console.log("hhh",usersdetails);
+         //if (!usersdetails.length){
       return({ sucess:true, statusCode: 200, message:"user created sucessfully", user:{usersdetails}});
-         }
+       //  }
     } catch (error) {
         return({ sucess:false, statusCode: 400, message:"user not found", error: error.message });
      }
@@ -42,4 +43,19 @@ async function addUser(users) {
             return({ sucess:false, statusCode: 400, message:"user not found", error:error.message});
         }
         }     
+        
+        // getter setter
+//  async function getteruser() {
+//      try {
+//          const person = await db.Users.create({name:'depashikha' });
+//  console.log("iii", person);
+         
+//          {
+//       return({ sucess:true, statusCode: 200, message:"user created sucessfully",user:{ person}});
+//          }
+//     } catch (error) {
+//         return({ sucess:false, statusCode: 400, message:"user not found", error: error.message });
+//      }
+//      }
+
 module.exports = {addUser, getUser, updateUser, deletedUser };

@@ -17,6 +17,7 @@ route.post("/adduser", async(req,res) =>{
  route.get("/", async (req, res) =>{
      try{
   const userInfo = await getUser();
+  console.log("jjj",userInfo);
   res.status(userInfo?.statusCode).json(userInfo)
 
  } catch (error) {
@@ -27,6 +28,7 @@ route.post("/adduser", async(req,res) =>{
  route.get("/:id", async (req, res)=> {
      try {
          let userdetail = await  getUser(req?.params?.id);
+         console.log("kkk",userdetail);
          res.status(userdetail?.statusCode).json(userdetail)
      }catch (error) {
          res.status(500).json({ sucess: false, message: "internal server error", error: error.message});
@@ -50,4 +52,17 @@ route.delete("/delete/:id", async (req, res) =>{
     res.status(500).json({ sucess: false, message: "internal server error" , error: error.message});
     }
 });
+
+// route.get("/get", async (req, res) =>{
+//     try{
+//  const data = await getteruser();
+//  console.log("llll");
+//  console.log({data});
+//  res.status(data?.statusCode).json(data)
+
+// } catch (error) {
+//     res.status(500).json({ sucess: false, message: "internal server error", error: error.message});
+// }
+// });
+
     module.exports = route;
